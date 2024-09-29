@@ -1,0 +1,64 @@
+/* Hero section styling */
+.hero {
+    height: 20vh;
+    background: url('luggage-bg.jpg') no-repeat center center/cover;
+    color: white;
+}
+
+/* Features icons */
+#features .fa {
+    color: #007bff;
+}
+
+#contact form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+#home.image-container {
+    text-align: center; 
+    padding: 20px; 
+    
+}
+
+.styled-image {
+    width: 300px; 
+    height: auto; 
+    margin-bottom: 20px; 
+    border: 2px solid #007bff; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.image-wrapper {
+    position: relative; 
+    display: inline-block; 
+}
+
+.overlay {
+    position: absolute;
+    top: 0; 
+    left: 0; 
+    width: 100%; 
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); 
+    border-radius: 8px; 
+}
+
+.overlay-text {
+    position: absolute; 
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; 
+    font-size: 24px;
+    z-index: 1; 
+}
+
+
+footer {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
