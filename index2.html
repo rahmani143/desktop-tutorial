@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Automated Self-Following Luggage</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      #map {
+        height: 400px;
+        width: 100%;
+      }
+    </style>
+    <!-- Leaflet.js CSS for map -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    />
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Smart Luggage</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#home">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#features">Features</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contact</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div id="carouselExampleIndicators" class="carousel slide">
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        </div>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <div class="position-relative" style="height: 500px;">
+                    <img src="bag_1_bg.jpg" class="d-block w-100" alt="..." style="height: 500px; object-fit: cover;">
+                    <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Slide 1 Title</h5>
+                        <p>Some description for slide 1.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="position-relative" style="height: 500px;">
+                    <img src="..." class="d-block w-100" alt="..." style="height: 500px; object-fit: cover;">
+                    <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Slide 2 Title</h5>
+                        <p>Some description for slide 2.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <div class="position-relative" style="height: 500px;">
+                    <img src="..." class="d-block w-100" alt="..." style="height: 500px; object-fit: cover;">
+                    <div class="bg-dark position-absolute top-0 start-0 w-100 h-100 opacity-50"></div>
+                    <div class="carousel-caption d-none d-md-block">
+                        <h5>Slide 3 Title</h5>
+                        <p>Some description for slide 3.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    
+
+    <!-- Features Section -->
+    <section id="features" class="container py-5 text-center">
+        <h2 class="mb-4">Features</h2>
+        <p class="lead">Discover what makes our luggage smart and unique.</p>
+        <div class="row">
+            <div class="col-md-4">
+                <i class="fas fa-wifi fa-3x text-primary mb-3"></i>
+                <h4>Wi-Fi / Bluetooth Tracking</h4>
+                <p>Connect your phone and let the luggage follow you using Wi-Fi or Bluetooth.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-battery-full fa-3x text-primary mb-3"></i>
+                <h4>Long Battery Life</h4>
+                <p>Enjoy up to 8 hours of battery life, so your luggage stays with you all day.</p>
+            </div>
+            <div class="col-md-4">
+                <i class="fas fa-camera fa-3x text-primary mb-3"></i>
+                <h4>Object Detection</h4>
+                <p>Equipped with a smart camera for advanced object and person detection.</p>
+            </div>
+        </div>
+        <!-- GPS Live Tracking Section -->
+        <div class="my-5">
+            <h4>Live GPS Tracking</h4>
+            <p>Track your luggage in real time with live GPS updates.</p>
+            <!-- Div element for the map -->
+            <div id="map"></div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-light py-5">
+        <div class="container">
+            <h2 class="text-center mb-4">Get In Touch</h2>
+            <p class="text-center lead mb-5">Have questions? Reach out to us!</p>
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea class="form-control" id="message" rows="4" placeholder="Your message..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="text-center py-4 bg-light">
+        <p>&copy; 2024 SmartLuggage | All Rights Reserved</p>
+    </footer>
+
+    <!-- Leaflet.js JavaScript for map -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Initialize the map and set its view to a geographical location (latitude, longitude) and zoom level
+const map = L.map("map").setView([51.505, -0.09], 13);
+
+// Set up the OpenStreetMap layer
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19,
+  attribution:
+    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+}).addTo(map);
+
+// Create a custom icon for the luggage
+const luggageIcon = L.icon({
+    iconUrl: 'luggage-bag.png',
+    iconSize: [50, 50], // Size of the icon
+    iconAnchor: [25, 50], // Point of the icon which will correspond to marker's location
+    popupAnchor: [0, -50] // Point from which the popup should open relative to the iconAnchor
+});
+
+// Add an initial marker at a default location with the custom icon
+let marker = L.marker([51.505, -0.09], { icon: luggageIcon }).addTo(map);
+
+// Function to fetch and update the GPS location periodically
+function updateGPSLocation() {
+  fetch("https://your-server-url.com/get_gps")  // Replace with your server URL
+    .then(response => response.json())
+    .then(data => {
+      const lat = data.latitude;
+      const lng = data.longitude;
+
+      // Update the marker position
+      marker.setLatLng([lat, lng]);
+
+      // Center the map to the new GPS location
+      map.setView([lat, lng], 13);
+    })
+    .catch(error => console.error('Error fetching GPS data:', error));
+}
+
+// Update the GPS location every 5 seconds
+setInterval(updateGPSLocation, 5000);
+    </script>
+</body>
+</html>
