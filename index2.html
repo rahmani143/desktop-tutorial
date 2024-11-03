@@ -14,10 +14,10 @@
       }
     </style>
     <!-- Leaflet.js CSS for map -->
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
-    />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Firebase Libraries -->
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.0/firebase-database.js"></script>
 </head>
 <body>
     <!-- Navbar -->
@@ -89,7 +89,6 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-    
 
     <!-- Features Section -->
     <section id="features" class="container py-5 text-center">
@@ -156,52 +155,65 @@
     <!-- Leaflet.js JavaScript for map -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Firebase Configuration -->
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY", // Replace with your actual API key
+            authDomain: "YOUR_PROJECT_ID.firebaseapp.com", // Replace with your actual project ID
+            databaseURL: "https://YOUR_PROJECT_ID.firebaseio.com", // Replace with your actual database URL
+            projectId: "YOUR_PROJECT_ID", // Replace with your actual project ID
+            storageBucket: "YOUR_PROJECT_ID.appspot.com",
+            messagingSenderId: "", // Can be left empty
+            appId: "" // Can be left empty
+        };
+
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
+        const database = firebase.database(app);
+    </script>
 
     <script>
         // Initialize the map and set its view to a geographical location (latitude, longitude) and zoom level
-const map = L.map("map").setView([17.983644,79.532732], 13);
+        const map = L.map("map").setView([17.983644, 79.532732], 13);
 
-// Set up the OpenStreetMap layer
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  maxZoom: 19,
-  attribution:
-    '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-}).addTo(map);
+        // Set up the OpenStreetMap layer
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        }).addTo(map);
 
-// Create a custom icon for the luggage
-const luggageIcon = L.icon({
-    iconUrl: 'luggage-bag.png',
-    iconSize: [50, 50], // Size of the icon
-    iconAnchor: [25, 50], // Point of the icon which will correspond to marker's location
-    popupAnchor: [0, -50] // Point from which the popup should open relative to the iconAnchor
-});
+        // Create a custom icon for the luggage
+        const luggageIcon = L.icon({
+            iconUrl: 'luggage-bag.png',
+            iconSize: [50, 50], // Size of the icon
+            iconAnchor: [25, 50], // Point of the icon which will correspond to marker's location
+            popupAnchor: [0, -50] // Point from which the popup should open relative to the iconAnchor
+        });
 
-// Add an initial marker at a default location with the custom icon
-let marker = L.marker([17.983644,79.532732], { icon: luggageIcon }).addTo(map);
+        // Add an initial marker at a default location with the custom icon
+        let marker = L.marker([17.983644, 79.532732], { icon: luggageIcon }).addTo(map);
 
-// Function to fetch and update the GPS location periodically
-function updateGPSLocation() {
-  fetch("https://your-server-url.com/get_gps")  // Replace with your server URL
-    .then(response => response.json())
-    .then(data => {
-      const lat = data.latitude;
-      const lng = data.longitude;
+        // Function to fetch and update the GPS location periodically
+        function updateGPSLocation() {
+            const gpsRef = database.ref('gps_coordinates'); // Replace with your actual path in the database
+            gpsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    const lat = data.latitude; // Adjust according to your database structure
+                    const lng = data.longitude; // Adjust according to your database structure
 
-      // Update the marker position
-      marker.setLatLng([lat, lng]);
+                    // Update the marker position
+                    marker.setLatLng([lat, lng]);
 
-      // Center the map to the new GPS location
-      map.setView([lat, lng], 13);
-    })
-    .catch(error => console.error('Error fetching GPS data:', error));
-}
+                    // Center the map to the new GPS location
+                    map.setView([lat, lng], 13);
+                }
+            });
+        }
 
-// Update the GPS location every 5 seconds
-setInterval(updateGPSLocation, 5000);
+        // Call the function to start fetching GPS location
+        updateGPSLocation();
     </script>
 </body>
 </html>
